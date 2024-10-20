@@ -10,6 +10,7 @@
 
 - [Arrays](#arrays)
   - [Declaration](#declaration)
+  - [](#)
 
 
 ## Declaration
@@ -34,6 +35,19 @@
       
       // ---------------------------------------------> 3
       fruits[1] = 'Pear';
+
+      // ---------------------------------------------> 4
+      let arr = [
+        'Apple',            // string
+        {                   // object
+          name: 'John'
+        },
+        true,               // boolean
+        function() {        // function
+          alert('hello');
+        }
+      ];
+
       ```
 
-
+## 
