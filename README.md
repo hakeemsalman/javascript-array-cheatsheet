@@ -18,6 +18,8 @@
   - [Multidimensional arrays](#multidimensional-arrays)
   - [toString](#tostring)
   - [Don’t compare arrays with ==](#dont-compare-arrays-with-)
+  - [Array Methods](#array-methods)
+    - [arr.](#arr)
 
 
 ## Declaration
@@ -256,5 +258,8 @@ alert( String(arr) === '1,2,3' ); // true
 
 - To compare arrays, don’t use the == operator (as well as >, < and others), as they have no special treatment for arrays. They handle them as any objects, and it’s not what we usually want.
 
-Instead you can use `for..of` loop to compare arrays item-by-item.
+> Instead you can use `for..of` loop to compare arrays item-by-item.
 
+## Array Methods
+
+### arr.
