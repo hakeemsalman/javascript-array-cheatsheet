@@ -13,6 +13,11 @@
   - [Methods pop/push, shift/unshift](#methods-poppush-shiftunshift)
   - [How Arrays works internally](#how-arrays-works-internally)
   - [Performance](#performance)
+  - [Loops](#loops)
+  - [A word about length](#a-word-about-length)
+  - [Multidimensional arrays](#multidimensional-arrays)
+  - [toString](#tostring)
+  - [Don’t compare arrays with ==](#dont-compare-arrays-with-)
 
 
 ## Declaration
@@ -112,3 +117,144 @@ But they all break if we quit working with an array as with an “ordered collec
 > If you need arbitrary keys, chances are high that you actually require a regular object `{}`.
 
 ## Performance
+
+- Methods `push`/`pop` run fast
+- While `shift`/`unshift` are slow.
+
+The `shift` operation must do 3 things:
+
+- Remove the element with the index `0`.
+- Move all elements to the left, renumber them from the index `1` to `0`, from `2` to `1` and so on.
+- Update the `length` property.
+
+> **The more elements in the array, the more time to move them, more in-memory operations.**
+
+The `push`/`pop` operation have only one thing to do:
+
+- To extract an element from the end
+- the `pop` method cleans the index and shortens `length`.
+
+> **The pop method does not need to move anything, because other elements keep their indexes. That’s why it’s blazingly fast.**
+
+## Loops
+
+There are **three** ways to iterate the array:
+
+- `for` (Old traditional way)
+- `for..of`
+- `for..in` (**object** is bad idea)
+
+```js
+let arr = ["Apple", "Orange", "Pear"];
+
+// Traditional way
+for (let i = 0; i < arr.length; i++) {
+  alert( arr[i] );
+}
+
+// iterates over array elements
+for (let fruit of fruits) {
+  alert( fruit );
+}
+
+
+// NOT RECOMMANDATION
+for (let key in arr) {
+  alert( arr[key] ); // Apple, Orange, Pear
+}
+```
+But that’s actually a bad idea. There are potential problems with it:
+
+1. The loop `for..in` iterates over all properties, not only the numeric ones.
+   1. There are so-called “array-like” objects in the browser and in other environments, that look like arrays. That is, they have `length` and indexes properties, but they may also have other non-numeric properties and methods, which we usually don’t need. The `for..in` loop will list them though. So if we need to work with array-like objects, then these “extra” properties can become a problem.
+2. The `for..in` loop is optimized for generic objects, not arrays, and thus is 10-100 times slower. Of course, it’s still very fast. The speedup may only matter in bottlenecks. But still we should be aware of the difference.
+
+Generally, we shouldn’t use `for..in` for arrays.
+
+## A word about length
+
+- The `length` property automatically updates when we modify the array.
+- It is the greatest numeric index plus one.
+- ```js
+  let fruits = [];
+  fruits[123] = "Apple";
+
+  alert( fruits.length ); // 124
+  ```
+
+### lenght is writable
+
+- If we increase it manually, nothing interesting happens.
+- But if we decrease it, the array is truncated.
+- The process is irreversible:
+    - ```js
+      let arr = [1, 2, 3, 4, 5];
+
+      arr.length = 2; // truncate to 2 elements
+      alert( arr ); // [1, 2]
+
+      arr.length = 5; // return length back
+      alert( arr[3] ); // undefined: the values do not return
+      ```
+
+> So, the simplest way to **clear** the **array** is: `arr.length = 0;`.
+
+
+## new Array()
+
+- There is one more syntax to create an array:
+    - ```js
+      let arr = new Array("Apple", "Pear", "etc");
+      ```
+- If `new Array` is called with a single argument which is a number,
+- then it creates an array *without items, but with the given length*.
+- To avoid such suprises, we usually use **square brackets**.
+
+```js
+let arr = new Array(2); // will it create an array of [2] ?
+
+alert( arr[0] ); // undefined! no elements.
+
+alert( arr.length ); // length 2
+```
+
+## Multidimensional arrays
+
+- Arrays can have items that are also arrays.
+- We can use it for multidimensional arrays:
+
+```js
+let matrix = [
+  [1, 2, 3],
+  [4, 5, 6],
+  [7, 8, 9]
+];
+
+alert( matrix[0][1] ); // 2, the second value of the first inner array
+```
+
+## toString
+
+- Arrays have their own implementation of `toString` method that returns a comma-separated list of elements.
+
+```js
+let arr = [1, 2, 3];
+
+alert( arr ); // 1,2,3
+alert( String(arr) === '1,2,3' ); // true
+```
+
+- [More on toString](https://javascript.info/array#tostring)
+
+
+## Don’t compare arrays with ==
+
+- Let’s recall the rules:
+  - Two objects are equal `==` only if they’re references to the same object.
+  - If one of the arguments of `==` is an object, and the other one is a primitive, then the object gets converted to primitive, as explained in the chapter [Object to primitive conversion](https://javascript.info/object-toprimitive).
+  - …With an exception of null and undefined that equal `==` each other and nothing else.
+
+- To compare arrays, don’t use the == operator (as well as >, < and others), as they have no special treatment for arrays. They handle them as any objects, and it’s not what we usually want.
+
+Instead you can use `for..of` loop to compare arrays item-by-item.
+
