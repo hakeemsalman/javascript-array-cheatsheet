@@ -12,6 +12,7 @@
   - [Declaration](#declaration)
   - [Methods pop/push, shift/unshift](#methods-poppush-shiftunshift)
   - [How Arrays works internally](#how-arrays-works-internally)
+  - [Performance](#performance)
 
 
 ## Declaration
@@ -105,3 +106,9 @@ But they all break if we quit working with an array as with an “ordered collec
 </td>
 </tr>
 </table>
+
+> Please think of arrays as special structures to work with the ordered data.
+> They provide special methods for that. Arrays are carefully tuned inside JavaScript engines to work with contiguous ordered data, please use them this way.
+> If you need arbitrary keys, chances are high that you actually require a regular object `{}`.
+
+## Performance
