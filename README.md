@@ -19,7 +19,26 @@
   - [toString](#tostring)
   - [Don’t compare arrays with ==](#dont-compare-arrays-with-)
   - [Array Methods](#array-methods)
-    - [arr.](#arr)
+    - [arr.splice](#arrsplice)
+    - [arr.slice](#arrslice)
+    - [arr.concat](#arrconcat)
+    - [arr.forEach](#arrforeach)
+  - [Searching methods in Array](#searching-methods-in-array)
+    - [arr.indexOf](#arrindexof)
+    - [arr.lastIndexOf](#arrlastindexof)
+    - [arr.includes](#arrincludes)
+    - [arr.find](#arrfind)
+    - [arr.findIndex](#arrfindindex)
+    - [arr.findLastIndex](#arrfindlastindex)
+    - [arr.filter](#arrfilter)
+  - [Transforming methods in an array](#transforming-methods-in-an-array)
+    - [arr.map](#arrmap)
+      - [2. `sort(fn)`](#2-sortfn)
+      - [3. `reverse()`](#3-reverse)
+      - [4. `split()` and `join()`](#4-split-and-join)
+      - [5. `reduce()` and `reduceRight()`](#5-reduce-and-reduceright)
+      - [6. `Array.isArray()`](#6-arrayisarray)
+      - [7. `thisArg` in Array Methods](#7-thisarg-in-array-methods)
 
 
 ## Declaration
@@ -262,4 +281,352 @@ alert( String(arr) === '1,2,3' ); // true
 
 ## Array Methods
 
-### arr.
+### arr.splice
+
+- Modifies the original array by **adding, removing, or replacing elements** at a specified index.
+- Takes **three** arguments: starting index, number of elements to remove, and optional elements to add.
+- Returns an array of removed elements.
+- *Negative* indexes allowed (Negative means from the **end** of the array)
+
+<span style="color: red">&#9830;</span> **Parameter**: `splice(start, deleteCount, <item1, item2, /* …, */ itemN>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **YES**
+
+```javascript
+let arr = [1, 2, 3, 4, 5];
+let removed = arr.splice(2, 2, 6, 7); // Removes 2 elements from starting index 2, adds 6 and 7
+// Result: arr = [1, 2, 6, 7, 5],
+// returned array: removed = [3, 4]
+alert(arr.splice(0));                 // [1, 2, 3, 4, 5] removed all elements
+alert(arr);                           // [] empty array
+
+arr = [1, 2, 5];
+// from index -1 (one step from the end)
+// delete 0 elements,
+// then insert 3 and 4
+arr.splice(-1, 0, 3, 4);
+
+alert( arr ); // 1,2,3,4,5
+```
+
+### arr.slice
+
+- Returns a **shallow copy** of a portion of the array, based on the start and end indices provided.
+- Does not modify the original array.
+- Does **NOT** include *end* indexes value.
+- Both `start` and `end` can be negative (it means from the end of the array)
+- It’s similar to a string method `str.slice`, but instead of substrings, it makes subarrays.
+
+
+<span style="color: red">&#9830;</span> **Parameter**: `slice(<start>, <end>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let arr = [1, 2, 3, 4, 5];
+let result = arr.slice(1, 3); // Extracts elements from index 1 to 3 (not including 3)
+// Result: result = [2, 3], arr = [1, 2, 3, 4, 5]
+
+let arrCopy = arr.slice();    // copy of arr, call without arguments 
+```
+
+> We can also call it without arguments: `arr.slice()` creates a copy of `arr`. That’s often used to obtain a copy for further transformations that <span style="color: orange">**should not affect**</span> the original array.
+
+
+### arr.concat
+
+- Combines two or more arrays and returns a **new array**.
+- Does not modify the original arrays.
+
+<span style="color: red">&#9830;</span> **Parameter**: `concat(value1, <value2, /* …, */ valueN>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let arr1 = [1, 2];
+let arr2 = [3, 4];
+let result = arr1.concat(arr2); // Combines arr1 and arr2
+// Result: result = [1, 2, 3, 4]
+```
+
+---
+
+### arr.forEach
+
+- Executes a **provided function** once for each array element.
+- Does not return a new array or modify the original array.
+
+<span style="color: red">&#9830;</span> **Parameter**: `forEach(callbackFn, <thisArg>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let arr = [1, 2, 3];
+arr.forEach((num, index) => console.log(`Index ${index}: ${num}`));
+// Logs each element and 
+// index:
+//    "Index 0: 1"
+//    "Index 1: 2"
+//    ...
+//    ...etc.
+```
+
+> The result of the function (if it returns any) is thrown away and ignored.
+
+
+## Searching methods in Array
+
+### arr.indexOf
+
+- It Returns the **first index** at which a given element can be found, or `-1` if not found.
+- It uses the strict equality `===` for comparison.
+- It does not handle `NaN` correctly. (see [includes](#arrincludes))
+- 
+<span style="color: red">&#9830;</span> **Parameter**: `indexOf(searchElement, <fromIndex>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+
+```javascript
+let arr = [1, 2, 3, 2];
+let first = arr.indexOf(2);    // Result: 1
+
+const arr = [NaN];
+alert( arr.indexOf(NaN) ); // -1 (wrong, should be 0)
+```
+
+
+
+### arr.lastIndexOf
+
+- **`lastIndexOf(value)`**: Returns the **last index** at which an element appears, or `-1` if not found.
+
+<span style="color: red">&#9830;</span> **Parameter**: `lastIndexOf(searchElement, <fromIndex>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let arr = [1, 2, 3, 2];
+let last = arr.lastIndexOf(2); // Result: 3
+```
+
+### arr.includes
+
+- Returns `true` if the array **contains a specified element**; otherwise, returns `false`.
+- If we want to check if `item` exists in the `array` and don’t need the index, then `arr.includes` is preferred.
+- Negative index counts back from the end of the array.
+- The `includes` method handles `NaN` correctly, a vice-versa of `indexOf`.
+
+<span style="color: red">&#9830;</span> **Parameter**: `includes(searchElement, <fromIndex>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let arr = [1, 2, 3];
+alert(arr.includes(2));       // Result: true
+alert(arr.includes(2, 1));    // Result: true
+alert(arr.includes(2, -1));   // Result: false
+alert(arr.includes("2"));     // Result: false
+
+const arr = [NaN];
+alert( arr.indexOf(NaN) ); // -1 (wrong, should be 0)
+alert( arr.includes(NaN) );// true (correct)
+```
+
+### arr.find
+
+- It Returns the **first element** that satisfies the callback function’s test.
+- If it returns `true`, the search is stopped, the `item` is returned. If nothing is found, `undefined` is returned.
+- It looks for a single (first) element that makes the function return true. For many use [filters](#arrfilter)
+
+
+<span style="color: red">&#9830;</span> **Parameter**: `find(callbackFn, <thisArg>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let result = arr.find(function(item, index, array) {
+  // if true is returned, item is returned and iteration is stopped
+  // for falsy scenario returns undefined
+});
+
+let users = [
+  {id: 1, name: "John"},
+  {id: 2, name: "Pete"},
+  {id: 3, name: "Mary"}
+];
+
+let user = users.find(item => item.id == 1);
+let userUndefined = users.find(item => item.id == 4);
+
+alert(user.name);             // John
+alert(userUndefined?.name);   // undefined
+```
+
+You can practice problems from this [LINK](https://hakeemsalman.github.io/javascript-practice-questions/#)
+
+### arr.findIndex
+
+- It Returns the **index** of the first element that satisfies the test, or `-1` if not found.
+
+<span style="color: red">&#9830;</span> **Parameter**: `findIndex(callbackFn, <thisArg>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let users = [
+  {id: 1, name: "John"},
+  {id: 2, name: "Pete"},
+  {id: 3, name: "Mary"},
+  {id: 4, name: "John"}
+];
+
+// Find the index of the first John
+alert(users.findIndex(user => user.name == 'John')); // 0
+```
+
+You can practice problems from this [LINK](https://hakeemsalman.github.io/javascript-practice-questions/#)
+
+### arr.findLastIndex
+
+- **`findLastIndex(callback)`**: Returns the **last index** where the condition is true.
+
+<span style="color: red">&#9830;</span> **Parameter**: `findLastIndex(callbackFn, <thisArg>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+let users = [
+  {id: 1, name: "John"},
+  {id: 2, name: "Pete"},
+  {id: 3, name: "Mary"},
+  {id: 4, name: "John"}
+];
+
+// Find the index of the last John
+alert(users.findLastIndex(user => user.name == 'John')); // 3
+```
+
+---
+
+### arr.filter
+
+- Similar to `find` but it returns as a `array` of pass elements instead of single element.
+- Creates a [**Shallow copy**](https://developer.mozilla.org/en-US/docs/Glossary/Shallow_copy) (new array) with all elements that pass the test implemented by the provided function.
+- Does not modify the original array.
+- If **no** elements pass the test, an **empty** `array` is returned.
+- It should return a [truthy](https://developer.mozilla.org/en-US/docs/Glossary/Truthy) value to keep the element in the resulting array, and a falsy value otherwise. 
+
+<span style="color: red">&#9830;</span> **Parameter**: `filter(callbackFn, <thisArg>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```javascript
+// SYNTAX
+let results = arr.filter(function(item, index, array) {
+  // if true item is pushed to results and the iteration continues
+  // returns empty array if nothing found
+});
+
+let arr = [1, 2, 3, 4];
+let result = arr.filter(num => num % 2 === 0); // Filters even numbers
+// Result: result = [2, 4]
+```
+
+## Transforming methods in an array
+
+### arr.map
+
+- Creates a **new array** by applying a provided function to each element in the array.
+- Does not modify the original array.
+
+<span style="color: red">&#9830;</span> **Parameter**: `filter(callbackFn, <thisArg>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+
+```javascript
+let arr = [1, 2, 3];
+let result = arr.map(num => num * 2); // Multiplies each element by 2
+// Result: result = [2, 4, 6]
+```
+
+---
+
+#### 2. `sort(fn)`
+- Sorts the elements of an array **in place** (modifies the original array).
+- Takes an optional comparison function `fn` to define custom sorting logic.
+
+**Example:**
+```javascript
+let arr = [3, 1, 4, 2];
+arr.sort((a, b) => a - b); // Sorts in ascending order
+// Result: arr = [1, 2, 3, 4]
+```
+
+---
+
+#### 3. `reverse()`
+- Reverses the order of elements **in place**.
+- Modifies the original array.
+
+**Example:**
+```javascript
+let arr = [1, 2, 3];
+arr.reverse();
+// Result: arr = [3, 2, 1]
+```
+
+---
+
+#### 4. `split()` and `join()`
+- **`split()`**: Splits a string into an array of substrings, based on a specified delimiter. (Note: this is a `String` method, not an `Array` method).
+- **`join()`**: Combines all elements of an array into a single string, separated by a specified delimiter.
+
+**Example:**
+```javascript
+let str = "Hello World";
+let arr = str.split(" ");       // Splits by spaces
+// Result: arr = ["Hello", "World"]
+
+let joined = arr.join(", ");    // Joins with comma and space
+// Result: joined = "Hello, World"
+```
+
+---
+
+#### 5. `reduce()` and `reduceRight()`
+- **`reduce()`**: Applies a function against an accumulator and each element (left-to-right) to reduce the array to a single value.
+- **`reduceRight()`**: Similar to `reduce()`, but works **right-to-left**.
+
+**Example:**
+```javascript
+let arr = [1, 2, 3, 4];
+let sum = arr.reduce((acc, num) => acc + num, 0); // Sum of all elements
+// Result: sum = 10
+```
+
+---
+
+#### 6. `Array.isArray()`
+- Determines if a value is an **array**.
+- Returns `true` if the value is an array, otherwise `false`.
+
+**Example:**
+```javascript
+let arr = [1, 2, 3];
+let result = Array.isArray(arr); // Result: true
+```
+
+---
+
+#### 7. `thisArg` in Array Methods
+- Many array methods, like `map()`, `forEach()`, and `filter()`, support an optional **`thisArg`** parameter.
+- `thisArg` lets you specify the value of `this` inside the callback function, allowing custom contexts to be passed.
+
+**Example:**
+```javascript
+let arr = [1, 2, 3];
+let multiplier = {
+  factor: 2,
+};
+
+let result = arr.map(function (num) {
+  return num * this.factor;
+}, multiplier); // Sets `this` to `multiplier` object
+// Result: result = [2, 4, 6]
+```
