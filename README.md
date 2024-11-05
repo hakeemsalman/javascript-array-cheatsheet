@@ -33,8 +33,8 @@
     - [arr.filter](#arrfilter)
   - [Transforming methods in an array](#transforming-methods-in-an-array)
     - [arr.map](#arrmap)
-      - [2. `sort(fn)`](#2-sortfn)
-      - [3. `reverse()`](#3-reverse)
+    - [arr.sort](#arrsort)
+    - [reverse()](#reverse)
       - [4. `split()` and `join()`](#4-split-and-join)
       - [5. `reduce()` and `reduceRight()`](#5-reduce-and-reduceright)
       - [6. `Array.isArray()`](#6-arrayisarray)
@@ -534,7 +534,7 @@ let result = arr.filter(num => num % 2 === 0); // Filters even numbers
 - Creates a **new array** by applying a provided function to each element in the array.
 - Does not modify the original array.
 
-<span style="color: red">&#9830;</span> **Parameter**: `filter(callbackFn, <thisArg>)`  
+<span style="color: red">&#9830;</span> **Parameter**: `map(callbackFn, <thisArg>)`  
 <span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
 <span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
 
@@ -547,20 +547,47 @@ let result = arr.map(num => num * 2); // Multiplies each element by 2
 
 ---
 
-#### 2. `sort(fn)`
+### arr.sort
+
 - Sorts the elements of an array **in place** (modifies the original array).
 - Takes an optional comparison function `fn` to define custom sorting logic.
+- The items are sorted as **strings** by default. &#9312;
+  - All elements are converted to strings for comparisons. For strings, lexicographic ordering is applied and indeed `"2" > "15"`.
 
-**Example:**
+<span style="color: red">&#9830;</span> **Parameter**: `filter(callbackFn, <thisArg>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **YES**
+
 ```javascript
+// items sorted as string -----------------------------> ( 1 )
+let arr = [ 1, 2, 15 ];
+// the method reorders the content of arr
+arr.sort();
+alert( arr );  // 1, 15, 2
+//"2".codePointAt() is 50 where as "15".codePointAt() is 49. So 50 is greater than 49.
+
+// custom logic func in sorting
+function compareNumeric(a, b) {
+  if (a > b) return 1;
+  if (a == b) return 0;
+  if (a < b) return -1;
+}
+let arr = [ 1, 2, 15,8,21,10,3,4 ];
+arr.sort(compareNumeric);
+alert(arr);  // 1, 2, 15
+
+
+
 let arr = [3, 1, 4, 2];
 arr.sort((a, b) => a - b); // Sorts in ascending order
+arr.sort((a, b) => b - a); // Sorts in descending order
 // Result: arr = [1, 2, 3, 4]
 ```
 
 ---
 
-#### 3. `reverse()`
+### reverse()
+
 - Reverses the order of elements **in place**.
 - Modifies the original array.
 
