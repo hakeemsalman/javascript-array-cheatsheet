@@ -8,6 +8,10 @@
 
 ---
 
+<span style="color: red">SHORT NOTES</span> is provided in this [LINK](./shortnotes/notes.md)
+
+---
+
 - [Arrays](#arrays)
   - [Declaration](#declaration)
   - [Methods pop/push, shift/unshift](#methods-poppush-shiftunshift)
@@ -34,11 +38,12 @@
   - [Transforming methods in an array](#transforming-methods-in-an-array)
     - [arr.map](#arrmap)
     - [arr.sort](#arrsort)
-    - [reverse()](#reverse)
-      - [4. `split()` and `join()`](#4-split-and-join)
-      - [5. `reduce()` and `reduceRight()`](#5-reduce-and-reduceright)
-      - [6. `Array.isArray()`](#6-arrayisarray)
-      - [7. `thisArg` in Array Methods](#7-thisarg-in-array-methods)
+    - [arr.reverse](#arrreverse)
+    - [join](#join)
+    - [arr.reduce](#arrreduce)
+    - [arr.reduceRight](#arrreduceright)
+    - [Array.isArray](#arrayisarray)
+    - [thisArg in Array Methods](#thisarg-in-array-methods)
 
 
 ## Declaration
@@ -457,7 +462,7 @@ alert(user.name);             // John
 alert(userUndefined?.name);   // undefined
 ```
 
-You can practice problems from this [LINK](https://hakeemsalman.github.io/javascript-practice-questions/#)
+> <span style="color: magenta; font-size: 24px">&#x1F64C;</span> You can practice problems from this [LINK](https://hakeemsalman.github.io/javascript-practice-questions/#) <span style="color: magenta; font-size: 24px">&#x1F60E;</span>
 
 ### arr.findIndex
 
@@ -549,13 +554,15 @@ let result = arr.map(num => num * 2); // Multiplies each element by 2
 
 ### arr.sort
 
-- Sorts the elements of an array **in place** (modifies the original array).
+- [Sorts](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) the elements of an array **in place** (modifies the original array).
 - Takes an optional comparison function `fn` to define custom sorting logic.
 - The items are sorted as **strings** by default. &#9312;
   - All elements are converted to strings for comparisons. For strings, lexicographic ordering is applied and indeed `"2" > "15"`.
+- For many alphabets, it’s better to use `str.localeCompare` method to correctly sort letters, such as `Ö`. &#9313;
+- To sort the elements in an array without mutating the original array, use [`toSorted()`](#arrtosorted).
 
-<span style="color: red">&#9830;</span> **Parameter**: `filter(callbackFn, <thisArg>)`  
-<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(element, <index>, <array>)`  
+<span style="color: red">&#9830;</span> **Parameter**: `sort(<compareFn>)`  
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(a, b)`  
 <span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **YES**
 
 ```javascript
@@ -579,73 +586,141 @@ alert(arr);  // 1, 2, 15
 
 
 let arr = [3, 1, 4, 2];
-arr.sort((a, b) => a - b); // Sorts in ascending order
-arr.sort((a, b) => b - a); // Sorts in descending order
-// Result: arr = [1, 2, 3, 4]
+arr.sort((a, b) => a - b);  // Sorts in ascending order
+arr.sort((a, b) => b - a);  // Sorts in descending order
+alert(arr);                 // Result: arr = [1, 2, 3, 4]
+
+// Use localeCompare for alphabets: ---------------------------> ( 2 )
+let countries = ['Österreich', 'Andorra', 'Vietnam'];
+alert( countries.sort( (a, b) => a > b ? 1 : -1) ); // Andorra, Vietnam, Österreich (WRONG)
+alert( countries.sort( (a, b) => a.localeCompare(b) ) ); // Andorra,Österreich,Vietnam (CORRECT!)
 ```
+
+> <span style="color: magenta; font-size: 24px">&#x1F64C;</span> You can practice problems from this [LINK](https://hakeemsalman.github.io/javascript-practice-questions/) <span style="color: magenta; font-size: 24px">&#x1F60E;</span>
+
 
 ---
 
-### reverse()
+### arr.reverse
 
 - Reverses the order of elements **in place**.
-- Modifies the original array.
+- Sparse arrays remain sparse after calling `reverse()`. Empty slots are copied over to their respective new indices as empty slots.
+- To reverse the elements in an array without mutating the original array, use [`toReversed()`](#arrtoreversed).
 
-**Example:**
+
+<span style="color: red">&#9830;</span> **Parameter**: `reverse()`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **YES**
+
 ```javascript
 let arr = [1, 2, 3];
 arr.reverse();
 // Result: arr = [3, 2, 1]
 ```
 
----
+### join
 
-#### 4. `split()` and `join()`
-- **`split()`**: Splits a string into an array of substrings, based on a specified delimiter. (Note: this is a `String` method, not an `Array` method).
-- **`join()`**: Combines all elements of an array into a single string, separated by a specified delimiter.
+- It [Joins](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/join) all elements of an array into a single string, separated by a specified delimiter.
+- It returns a **string** of all elements of arrays.
+<span style="color: red">&#9830;</span> **Parameter**: `join(<separator>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
 
-**Example:**
 ```javascript
-let str = "Hello World";
-let arr = str.split(" ");       // Splits by spaces
-// Result: arr = ["Hello", "World"]
-
-let joined = arr.join(", ");    // Joins with comma and space
-// Result: joined = "Hello, World"
+let arr = ['Bilbo', 'Gandalf', 'Nazgul'];
+let str = arr.join(';'); // glue the array into a string using ;
+alert( str ); // Bilbo;Gandalf;Nazgul
 ```
 
----
+### arr.reduce
 
-#### 5. `reduce()` and `reduceRight()`
-- **`reduce()`**: Applies a function against an accumulator and each element (left-to-right) to reduce the array to a single value.
-- **`reduceRight()`**: Similar to `reduce()`, but works **right-to-left**.
+- Applies a function against an accumulator and each element (left-to-right) to reduce the array to a single value.
+- As the function is applied, the result of the previous function call is passed to the next one as the first argument.
+- We also can omit the initial value. `reduce` takes the **first** **element** of the `array` as the initial value. And continue with 2nd element.
+- If the array is empty, then `reduce` call without **initial** **value** gives an <span style="color: red">**error**</span>
+- If initial value is given, then `reduce` would return initial value with empty array.
+- **So it’s advised to always specify the initial value.**
 
-**Example:**
+<span style="color: red">&#9830;</span> **Parameter**: `reduce(callbackFn, <initialValue>)`
+<span style="color: orange">&nbsp;&nbsp;&#9830;</span> `callbackFn(accumulator, currentValue, currentIndex, array)`.
+
+- **arguments**  
+<span style="color: magenta">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9830;</span>`accumulator`: is the result of the previous function call, equals initial the first time (if initial is provided).<br/>
+<span style="color: magenta">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9830;</span>`item`: is the current array item.<br/>
+<span style="color: magenta">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9830;</span>`index`: is its position.<br/>
+<span style="color: magenta">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#9830;</span>`array`: is the array <br/>
+  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+- **Exceptions**:
+- `TypeError`: Thrown if the array contains NO **elements** and `initialValue` is not provided
+
 ```javascript
-let arr = [1, 2, 3, 4];
-let sum = arr.reduce((acc, num) => acc + num, 0); // Sum of all elements
-// Result: sum = 10
+// SYNTAX
+let value = arr.reduce(function(accumulator, item, index, array) {
+  // ...
+}, [initial]);
+
+
+let arr = [1, 2, 3, 4, 5];
+let sum = arr.reduce((sum, num) => sum + num, 0); // Sum of all elements
+// Result: sum = 15
 ```
 
----
+| sum<br>0<br>current<br>1 | sum<br>0+1<br>current<br>2 | sum<br>0+1+2<br>current<br>3 | sum<br>0+1+2+3<br>current<br>4 | sum<br>0+1+2+3+4<br>current<br>5 |                  |
+|--------------------------|----------------------------|------------------------------|--------------------------------|----------------------------------|------------------|
+| 1                        | 2                          | 3                            | 4                              | 5                                | 0+1+2+3+4+5 = 15 |
 
-#### 6. `Array.isArray()`
+
+| | sum |	current |	result |
+|---|---|---|---|
+| the  first call |	0 |	1 |	1 |
+| the  second call |	1 |	2 |	3 |
+| the  third call |	3 |	3 |	6 |
+| the  fourth call |	6 |	4 |	10 |
+| the  fifth call |	10 |	5 |	15 |
+
+
+> For more information, please follow this [LINK](https://javascript.info/array-methods#reduce-reduceright)
+
+### arr.reduceRight
+- It Similar to [`reduce`](#arrreduce), but works **right-to-left**.
+- For more in depth information, please follow this [LINK](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reduceRight#description)
+
+<span style="color: red">&#9830;</span> **Parameter**: `reduceRight(callbackFn, <initialValue>)`  
+<span style="color: red">&#9830;</span> [**in-place**](https://en.wikipedia.org/wiki/In-place_algorithm): **NO**
+
+```js
+let arr = [1,2,3,4,5];
+
+// Error: Reduce of empty array with no initial value
+// if the initial value existed, reduce would return it for the empty arr.
+arr.reduceRight((sum, current) => console.log(sum+current , 'and ',current), 0); // 5, 4, 3, 2, 1
+```
+
+
+### Array.isArray
+
 - Determines if a value is an **array**.
 - Returns `true` if the value is an array, otherwise `false`.
+- So `typeof` does not help to distinguish a plain object from an array. &#9312;
 
-**Example:**
+
 ```javascript
-let arr = [1, 2, 3];
-let result = Array.isArray(arr); // Result: true
+// typeof -------------------------------------------------------> ( 1 )
+alert(typeof {}); // object
+alert(typeof []); // object (same)
+
+
+alert(Array.isArray({})); // false
+alert(Array.isArray([])); // true
 ```
 
 ---
 
-#### 7. `thisArg` in Array Methods
+### thisArg in Array Methods
+
 - Many array methods, like `map()`, `forEach()`, and `filter()`, support an optional **`thisArg`** parameter.
 - `thisArg` lets you specify the value of `this` inside the callback function, allowing custom contexts to be passed.
 
-**Example:**
 ```javascript
 let arr = [1, 2, 3];
 let multiplier = {
