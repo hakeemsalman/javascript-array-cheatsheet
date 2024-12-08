@@ -4,7 +4,9 @@
 
 <br/>
 
-- It is a Special data structures which is used to store ordered collections.
+### Other cheatsheet or notes links
+
+- [Javascript String Cheatsheet](https://hakeemsalman.github.io/javascript-string-cheatsheet/)
 
 ---
 
@@ -48,6 +50,7 @@
 
 ## Declaration
 
+- It is a Special data structures which is used to store ordered collections.
 - There are two syntaxes &#10112;:
 - Array elements are numbered, starting with zero.
 - We can get an element by its number in square brackets &#10113;:
