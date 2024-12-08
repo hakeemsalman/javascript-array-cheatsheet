@@ -7,6 +7,7 @@
 ### Other cheatsheet or notes links
 
 - [Javascript String Cheatsheet](https://hakeemsalman.github.io/javascript-string-cheatsheet/)
+- [HTML learning kit](https://hakeemsalman.github.io/html-learning-kit/)
 
 ---
 
