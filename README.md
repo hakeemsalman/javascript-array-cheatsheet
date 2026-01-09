@@ -7,6 +7,8 @@
 ### Other cheatsheet or notes links
 
 - [Javascript String Cheatsheet](https://hakeemsalman.github.io/javascript-string-cheatsheet/)
+- [Javascript Practice Questions](https://github.com/hakeemsalman/javascript-practice-questions)
+- [Javascript DSA Kit](https://github.com/hakeemsalman/javascript-dsa-kit)
 - [HTML learning kit](https://github.com/hakeemsalman/html-learning-kit)
 
 ---
